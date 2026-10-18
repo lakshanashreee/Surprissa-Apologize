@@ -1,16 +1,31 @@
-# React + Vite
+# A Sincere Apology for Stacy ❤️
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A dedicated, interactive, and heartfelt digital apology experience crafted exclusively for Stacy.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Layer 0: Dramatic Intro Hook** — An adorable hovering crying mascot with emotional headline, heartfelt subtitle, and a smooth countdown indicator to open the peace protocol.
+- **Layer 1: The Formal Apology Treaty** — Interactive 3-clause peace treaty with unconditional surrender and accountability, signing and confetti ratification.
+- **Layer 2: The Hanging Wall Gallery** — Five vintage-framed couple portraits on brass pins and wires with subtle pendulum swaying, interactive straightening, and personal reflections on why Stacy means everything.
+- **Layer 3: Golden Peace Cards** — Three luxury gold foil cards that peel and reveal honest truths and solemn promises straight from the heart.
+- **Layer 4: 10-Second Virtual Bear Hug Simulator** — Interactive glowing heart with press-and-hold tactile charging, floating warm aura ripples, real-time whisper reassurances, and tension-melting feedback.
+- **Layer 5: Grand Apology Vault & Wax-Sealed Letter** — Interactive wax seal that breaks to unveil an intimate, heartfelt apology letter addressed to Stacy, with an acoustic song player and celebratory forgiveness interaction.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19**
+- **Vite**
+- **Framer Motion**
+- **Lucide Icons**
+- **Canvas Confetti**
+- **Web Audio API**
 
-## Expanding the Oxlint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+# Install dependencies
+npm install
+
+# Start local development server
+npm run dev
+```
