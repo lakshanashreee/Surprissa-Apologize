@@ -289,8 +289,8 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   section {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
   }
 
   .desktop-only-nav {
@@ -300,6 +300,50 @@ h1, h2, h3, h4, h5, h6 {
   .mobile-only-toggle {
     display: flex !important;
   }
+}
+
+/* Floating Decor Stickers: Visible only on desktop / wide laptops, hidden on mobile & portrait tablets to prevent content overlap */
+.floating-decor-sticker {
+  position: fixed;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+  .floating-decor-sticker {
+    display: none !important;
+  }
+}
+
+/* Responsive Grid for Hanging Wall Gallery */
+.gallery-frames-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 18px;
+  align-items: start;
+  padding: 0 8px;
+}
+
+@media (max-width: 580px) {
+  .gallery-frames-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    padding: 0 !important;
+  }
+
+  .gallery-frames-grid > div:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: 220px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+/* Safe area padding helper */
+.safe-padding-container {
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-bottom: max(36px, env(safe-area-inset-bottom));
 }
 
 /* Reduced Motion Support */

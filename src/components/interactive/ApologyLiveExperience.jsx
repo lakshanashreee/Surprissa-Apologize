@@ -335,29 +335,30 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 'clamp(16px, 4vw, 40px)',
+      padding: 'clamp(14px, 3.5vw, 36px) clamp(12px, 3vw, 24px) clamp(32px, 6vw, 60px)',
+      boxSizing: 'border-box',
       overflowX: 'hidden'
     }}>
 
       {/* Background Audio Player Element for Real Music */}
       <audio ref={songAudioRef} src="/assets/Voice notes/Vaazhanum Baththa-Downringtone.com.mp3" loop />
 
-      {/* Floating Transparent Flower & Mascot Stickers (Visible during interactive layers 2-5) */}
+      {/* Floating Transparent Flower & Mascot Stickers (Visible on Laptops/Desktops > 900px, hidden on Phones to eliminate overlap) */}
       {currentLayer > 1 && (
         <>
-          <div style={{ position: 'absolute', top: '15px', left: '15px', width: 'clamp(65px, 10vw, 115px)', pointerEvents: 'none', zIndex: 2, opacity: 0.9 }} className="animate-float">
+          <div style={{ top: '24px', left: '24px', width: 'clamp(65px, 8vw, 115px)' }} className="floating-decor-sticker animate-float">
             <img src="/assets/sorry/cutestcryyying.png" alt="Crying Mascot" style={{ width: '100%', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.35))' }} />
           </div>
 
-          <div style={{ position: 'absolute', top: '15px', right: '15px', width: 'clamp(70px, 11vw, 125px)', pointerEvents: 'none', zIndex: 2, opacity: 0.9 }} className="animate-float-delayed">
+          <div style={{ top: '24px', right: '24px', width: 'clamp(70px, 8vw, 125px)' }} className="floating-decor-sticker animate-float-delayed">
             <img src="/assets/flowers/Pink flower.png" alt="Flower Decor" style={{ width: '100%', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.35))' }} />
           </div>
 
-          <div style={{ position: 'absolute', bottom: '15px', left: '15px', width: 'clamp(75px, 12vw, 130px)', pointerEvents: 'none', zIndex: 2, opacity: 0.9 }} className="animate-float-delayed">
+          <div style={{ bottom: '24px', left: '24px', width: 'clamp(75px, 9vw, 130px)' }} className="floating-decor-sticker animate-float-delayed">
             <img src="/assets/cat/birthdaycatwithflowers.png" alt="Cat Mascot" style={{ width: '100%', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.35))' }} />
           </div>
 
-          <div style={{ position: 'absolute', bottom: '15px', right: '15px', width: 'clamp(65px, 10vw, 110px)', pointerEvents: 'none', zIndex: 2, opacity: 0.9 }} className="animate-float">
+          <div style={{ bottom: '24px', right: '24px', width: 'clamp(65px, 8vw, 110px)' }} className="floating-decor-sticker animate-float">
             <img src="/assets/stickers/cutestwithbouquet.png" alt="Cute Sticker" style={{ width: '100%', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.35))' }} />
           </div>
         </>
@@ -1014,7 +1015,7 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
           <div style={{
             backgroundColor: '#0D0101',
             borderRadius: '28px',
-            padding: '36px 18px 30px',
+            padding: 'clamp(22px, 4vw, 36px) clamp(10px, 2.5vw, 18px) clamp(20px, 4vw, 30px)',
             border: '2px solid var(--color-peach-primary)',
             boxShadow: 'var(--shadow-glow)',
             marginBottom: '26px',
@@ -1030,14 +1031,8 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
               boxShadow: '0 0 15px rgba(212, 175, 55, 0.6)'
             }} />
 
-            {/* 5 Hanging Picture Frames Grid */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-              gap: '20px',
-              alignItems: 'start',
-              padding: '0 10px'
-            }}>
+            {/* 5 Hanging Picture Frames Grid (2 columns on mobile, fluid on desktop) */}
+            <div className="gallery-frames-grid">
               {galleryPortraits.map((portrait, idx) => {
                 const isSelected = activeFrameIndex === idx;
                 const isViewed = viewedFrames.includes(idx);
@@ -1074,12 +1069,12 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
                         duration: 3.8 + idx * 0.4,
                         ease: 'easeInOut'
                       }}
-                      whileHover={{ scale: 1.06, rotate: 0, y: -4 }}
+                      whileHover={{ scale: 1.05, rotate: 0, y: -4 }}
                       style={{
                         width: '100%',
                         backgroundColor: '#FFF4EB',
                         color: '#2B0404',
-                        padding: '12px 10px 16px',
+                        padding: 'clamp(10px, 2.5vw, 12px) clamp(8px, 2vw, 10px) clamp(12px, 3vw, 16px)',
                         borderRadius: '16px',
                         boxShadow: isSelected ? '0 15px 35px rgba(255, 217, 194, 0.6)' : '0 8px 24px rgba(0,0,0,0.7)',
                         border: isSelected ? '3px solid #8D0B0B' : '2.5px solid #D4AF37',
@@ -1095,7 +1090,7 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
 
                       {/* Image Inside Frame */}
                       <div style={{
-                        height: '115px',
+                        height: 'clamp(95px, 25vw, 115px)',
                         width: '100%',
                         backgroundColor: 'transparent',
                         display: 'flex',
@@ -1108,7 +1103,7 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
                           src={portrait.img}
                           alt={portrait.title}
                           style={{
-                            maxHeight: '105px',
+                            maxHeight: '100%',
                             maxWidth: '100%',
                             objectFit: 'contain',
                             filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.25))'
@@ -1116,14 +1111,14 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
                         />
                       </div>
 
-                      <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '0.92rem', color: '#8D0B0B', fontStyle: 'italic', margin: 0, lineHeight: 1.2 }}>
+                      <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(0.85rem, 2.4vw, 0.95rem)', color: '#8D0B0B', fontStyle: 'italic', margin: 0, lineHeight: 1.25 }}>
                         {portrait.title}
                       </h4>
 
-                      {/* Frame Status: "Tap to view" initially, permanently turns into "you're the best" once clicked */}
+                      {/* Frame Status: "Tap to view" initially, permanently turns into "you're the best ❤️" once clicked */}
                       <div style={{
                         marginTop: '8px',
-                        fontSize: '0.74rem',
+                        fontSize: 'clamp(0.7rem, 2vw, 0.74rem)',
                         fontWeight: 800,
                         color: isViewed ? '#8D0B0B' : '#777',
                         display: 'inline-flex',
@@ -1146,26 +1141,26 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 style={{
-                  marginTop: '28px',
+                  marginTop: '24px',
                   backgroundColor: 'var(--color-burgundy-primary)',
                   border: '1.5px solid var(--color-peach-primary)',
                   borderRadius: '20px',
-                  padding: '20px 24px',
+                  padding: 'clamp(14px, 3.5vw, 20px) clamp(14px, 3.5vw, 24px)',
                   textAlign: 'left',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '18px',
+                  gap: 'clamp(12px, 3vw, 18px)',
                   boxShadow: '0 8px 25px rgba(0,0,0,0.5)'
                 }}
               >
-                <div style={{ width: '60px', height: '60px', borderRadius: '12px', backgroundColor: '#FFF4EB', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <img src={galleryPortraits[activeFrameIndex].img} alt="Thumb" style={{ maxHeight: '50px', maxWidth: '50px', objectFit: 'contain' }} />
+                <div style={{ width: 'clamp(48px, 12vw, 60px)', height: 'clamp(48px, 12vw, 60px)', borderRadius: '12px', backgroundColor: '#FFF4EB', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <img src={galleryPortraits[activeFrameIndex].img} alt="Thumb" style={{ maxHeight: '85%', maxWidth: '85%', objectFit: 'contain' }} />
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: '#FFD9C2', fontStyle: 'italic', margin: '0 0 4px' }}>
+                  <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.05rem, 2.8vw, 1.25rem)', color: '#FFD9C2', fontStyle: 'italic', margin: '0 0 4px' }}>
                     "{galleryPortraits[activeFrameIndex].title}"
                   </h4>
-                  <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: '1.35rem', color: '#FAF4EE', margin: 0, lineHeight: 1.35 }}>
+                  <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: 'clamp(1.15rem, 3.2vw, 1.35rem)', color: '#FAF4EE', margin: 0, lineHeight: 1.35 }}>
                     "{galleryPortraits[activeFrameIndex].quote}"
                   </p>
                 </div>
@@ -1479,21 +1474,21 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
           style={{ width: '100%', maxWidth: '840px', textAlign: 'center', zIndex: 10 }}
         >
           {/* Virtual Bouquet Header */}
-          <div style={{ marginBottom: '22px' }}>
-            <div style={{ width: '125px', margin: '0 auto 12px' }}>
+          <div style={{ marginBottom: 'clamp(16px, 3.5vw, 22px)' }}>
+            <div style={{ width: 'clamp(85px, 20vw, 120px)', margin: '0 auto 10px' }}>
               <img
                 src="/assets/flowers/bouquet.png"
                 alt="Peace Bouquet"
                 style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 10px 30px rgba(255, 217, 194, 0.5))' }}
               />
             </div>
-            <span style={{ fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-peach-primary)' }}>
+            <span style={{ fontSize: 'clamp(0.75rem, 2vw, 0.85rem)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-peach-primary)' }}>
               ✦ WITH ALL MY LOVE ✦
             </span>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.4rem, 6vw, 3.8rem)', color: 'var(--color-peach-primary)', fontStyle: 'italic', margin: '6px 0', lineHeight: 1.2 }}>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.9rem, 5.2vw, 3.6rem)', color: 'var(--color-peach-primary)', fontStyle: 'italic', margin: '6px 0', lineHeight: 1.2 }}>
               I Love You More Than My Pride, {recipientName}.
             </h2>
-            <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: '1.75rem', color: 'var(--color-ivory)' }}>
+            <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: 'clamp(1.25rem, 3.5vw, 1.7rem)', color: 'var(--color-ivory)', lineHeight: 1.35, margin: 0 }}>
               "To {recipientName} — the person I never, ever want to go to bed upset with."
             </p>
           </div>
@@ -1502,21 +1497,22 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
           <div style={{
             backgroundColor: 'var(--color-burgundy-primary)',
             borderRadius: '20px',
-            padding: '18px 24px',
+            padding: 'clamp(12px, 3vw, 18px) clamp(14px, 3.5vw, 24px)',
             border: '1.5px solid var(--color-peach-primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '16px',
-            marginBottom: '26px',
-            boxShadow: 'var(--shadow-md)'
+            gap: '12px',
+            marginBottom: 'clamp(18px, 4vw, 26px)',
+            boxShadow: 'var(--shadow-md)',
+            flexWrap: 'wrap'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: '200px' }}>
               <button
                 onClick={() => { playSparkle(); setIsPlayingSong(!isPlayingSong); }}
                 style={{
-                  width: '46px',
-                  height: '46px',
+                  width: '44px',
+                  height: '44px',
                   borderRadius: '50%',
                   backgroundColor: 'var(--color-peach-primary)',
                   color: 'var(--color-burgundy-dark)',
@@ -1524,13 +1520,14 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  flexShrink: 0
                 }}
               >
                 {isPlayingSong ? <Pause size={20} /> : <Play size={20} style={{ marginLeft: '2px' }} />}
               </button>
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-ivory)' }}>
+                <div style={{ fontWeight: 700, fontSize: 'clamp(0.85rem, 2.4vw, 0.95rem)', color: 'var(--color-ivory)' }}>
                   Our Peace Melody (Warm Acoustic).mp3
                 </div>
                 <div style={{ fontSize: '0.78rem', color: 'var(--color-peach-soft)' }}>
@@ -1556,20 +1553,20 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
             backgroundColor: '#FFF4EB',
             color: '#2B0404',
             borderRadius: '24px',
-            padding: '36px 28px',
+            padding: 'clamp(22px, 5vw, 36px) clamp(16px, 4vw, 28px)',
             border: '2px solid var(--color-peach-primary)',
             boxShadow: '0 15px 40px rgba(0,0,0,0.5)',
             textAlign: 'left',
-            marginBottom: '28px',
+            marginBottom: 'clamp(20px, 4.5vw, 28px)',
             position: 'relative'
           }}>
             {!waxSealBroken ? (
-              <div style={{ textAlign: 'center', padding: '20px 0' }}>
+              <div style={{ textAlign: 'center', padding: '16px 0' }}>
                 <div
                   onClick={handleBreakSeal}
                   style={{
-                    width: '85px',
-                    height: '85px',
+                    width: 'clamp(75px, 18vw, 85px)',
+                    height: 'clamp(75px, 18vw, 85px)',
                     borderRadius: '50%',
                     backgroundColor: '#8D0B0B',
                     border: '3px solid #FFD9C2',
@@ -1583,34 +1580,34 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
                     color: '#FFD9C2'
                   }}
                 >
-                  <Heart size={32} fill="#FFD9C2" />
+                  <Heart size={30} fill="#FFD9C2" />
                   <span style={{ fontSize: '0.65rem', fontWeight: 800, marginTop: '2px' }}>UNSEAL</span>
                 </div>
-                <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: '#8D0B0B' }}>
+                <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.2rem, 3.4vw, 1.4rem)', color: '#8D0B0B', margin: '0 0 4px' }}>
                   Tap the Wax Seal to Open Your Sincere Apology Letter
                 </h4>
               </div>
             ) : (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1.5px solid rgba(141,11,11,0.2)', paddingBottom: '10px' }}>
-                  <span style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800, fontSize: '0.92rem', color: '#8D0B0B', letterSpacing: '0.05em' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1.5px solid rgba(141,11,11,0.2)', paddingBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
+                  <span style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif", fontWeight: 800, fontSize: 'clamp(0.78rem, 2vw, 0.92rem)', color: '#8D0B0B', letterSpacing: '0.05em' }}>
                     CONFIDENTIAL SINCERE APOLOGY ✦ UNSEALED FOR {recipientName.toUpperCase()}
                   </span>
-                  <span style={{ fontSize: '0.8rem', color: '#666', fontWeight: 600 }}>
+                  <span style={{ fontSize: '0.78rem', color: '#666', fontWeight: 600 }}>
                     Straight From The Heart
                   </span>
                 </div>
 
-                <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: '1.75rem', lineHeight: 1.6, marginBottom: '12px', color: '#180202' }}>
+                <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: 'clamp(1.4rem, 4vw, 1.75rem)', lineHeight: 1.5, marginBottom: '12px', color: '#180202' }}>
                   My Sweetest {recipientName},
                 </p>
-                <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: '1.55rem', lineHeight: 1.6, marginBottom: '14px', color: '#180202' }}>
+                <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: 'clamp(1.2rem, 3.4vw, 1.55rem)', lineHeight: 1.5, marginBottom: '14px', color: '#180202' }}>
                   I never want to go to sleep knowing that I caused you even a second of hurt. You are the brightest part of my days, my absolute favorite person to talk to, and the one whose happiness matters to me more than anything else in the world.
                 </p>
-                <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: '1.55rem', lineHeight: 1.6, marginBottom: '16px', color: '#180202' }}>
+                <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: 'clamp(1.2rem, 3.4vw, 1.55rem)', lineHeight: 1.5, marginBottom: '16px', color: '#180202' }}>
                   Thank you for your infinite grace, for tolerating my mistakes, and for loving me even on my clumsy days. I promise to listen better, love harder, and cherish you every single day, {recipientName}.
                 </p>
-                <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: '1.65rem', fontWeight: 700, textAlign: 'right', color: '#8D0B0B' }}>
+                <p style={{ fontFamily: 'var(--font-handwriting)', fontSize: 'clamp(1.25rem, 3.6vw, 1.65rem)', fontWeight: 700, textAlign: 'right', color: '#8D0B0B', margin: 0 }}>
                   — Always Yours, With All My Love, Forever & Always
                 </p>
               </motion.div>
@@ -1618,11 +1615,13 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
           </div>
 
           {/* Action Row */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '14px', marginTop: '16px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', marginTop: '16px' }}>
             <button
               onClick={handleReplay}
+              title="Replay Experience"
+              aria-label="Replay Experience"
               style={{
-                padding: '12px 22px',
+                padding: '12px 20px',
                 borderRadius: 'var(--radius-pill)',
                 backgroundColor: 'rgba(255, 217, 194, 0.15)',
                 border: '1px solid var(--color-peach-primary)',
@@ -1632,6 +1631,7 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '8px'
               }}
             >
@@ -1654,7 +1654,8 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
               animate={{ opacity: 1, y: 0, scale: 1 }}
               style={{
                 marginTop: '22px',
-                padding: '20px 24px',
+                marginBottom: '32px',
+                padding: 'clamp(18px, 4vw, 24px) clamp(16px, 4vw, 26px)',
                 borderRadius: '20px',
                 backgroundColor: 'rgba(255, 217, 194, 0.15)',
                 border: '1.5px solid var(--color-peach-primary)',
@@ -1670,7 +1671,7 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
               </span>
               <h3 style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: '1.45rem',
+                fontSize: 'clamp(1.2rem, 3.4vw, 1.45rem)',
                 color: 'var(--color-peach-primary)',
                 fontStyle: 'italic',
                 margin: '0 0 8px'
@@ -1679,10 +1680,10 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
               </h3>
               <p style={{
                 fontFamily: 'var(--font-handwriting)',
-                fontSize: '1.45rem',
+                fontSize: 'clamp(1.15rem, 3.2vw, 1.45rem)',
                 color: 'var(--color-ivory)',
                 margin: 0,
-                lineHeight: 1.4
+                lineHeight: 1.45
               }}>
                 I promise to cherish you, make you laugh, and love you unconditionally every single day. You have my whole heart!
               </p>
