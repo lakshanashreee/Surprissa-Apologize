@@ -365,3 +365,28 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 0;
   }
 }
+
+/* Prevent Text Selection and Long-Press Callouts (Mobile Touch-Hold Fix) */
+.no-select,
+.no-select *,
+.hug-simulator-layer,
+.hug-simulator-layer *,
+body.holding-hug,
+body.holding-hug * {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.hug-button {
+  touch-action: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+

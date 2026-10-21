@@ -214,11 +214,45 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
   const [isHoldingHug, setIsHoldingHug] = useState(false);
   const [hugCompleted, setHugCompleted] = useState(false);
   const hugTimerRef = useRef(null);
+  const hugButtonRef = useRef(null);
 
-  const startHugCharge = () => {
+  const clearAnySelection = () => {
+    try {
+      if (window.getSelection) {
+        const sel = window.getSelection();
+        if (sel) {
+          if (typeof sel.removeAllRanges === 'function') sel.removeAllRanges();
+          if (typeof sel.empty === 'function') sel.empty();
+        }
+      }
+      if (document.selection && typeof document.selection.empty === 'function') {
+        document.selection.empty();
+      }
+    } catch (err) {}
+  };
+
+  const startHugCharge = (e) => {
+    if (e) {
+      if (typeof e.preventDefault === 'function') {
+        const canCancel = e.cancelable !== undefined ? e.cancelable : (e.nativeEvent ? e.nativeEvent.cancelable : true);
+        if (canCancel) {
+          try {
+            e.preventDefault();
+          } catch (err) {}
+        }
+      }
+      if (typeof e.stopPropagation === 'function') {
+        e.stopPropagation();
+      }
+    }
+    clearAnySelection();
     if (hugCompleted) return;
     setIsHoldingHug(true);
     playPop();
+
+    if (hugTimerRef.current) {
+      clearInterval(hugTimerRef.current);
+    }
 
     hugTimerRef.current = setInterval(() => {
       setHugProgress(prev => {
@@ -240,7 +274,18 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
     }, 240); // 10 steps * 240ms = ~2.4s charge of pure warmth
   };
 
-  const stopHugCharge = () => {
+  const stopHugCharge = (e) => {
+    if (e) {
+      if (typeof e.preventDefault === 'function') {
+        const canCancel = e.cancelable !== undefined ? e.cancelable : (e.nativeEvent ? e.nativeEvent.cancelable : true);
+        if (canCancel) {
+          try {
+            e.preventDefault();
+          } catch (err) {}
+        }
+      }
+    }
+    clearAnySelection();
     if (hugCompleted) return;
     setIsHoldingHug(false);
     if (hugTimerRef.current) {
@@ -249,6 +294,90 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
     // Gently reset if released early
     setHugProgress(0);
   };
+
+  // While holding hug on mobile or desktop, lock selection and context menus completely
+  useEffect(() => {
+    if (!isHoldingHug) return;
+
+    document.body.classList.add('holding-hug');
+
+    const handleSelectionPrevent = (e) => {
+      clearAnySelection();
+      if (e && typeof e.preventDefault === 'function') {
+        e.preventDefault();
+      }
+      return false;
+    };
+
+    const handleContextMenu = (e) => {
+      if (e && typeof e.preventDefault === 'function') {
+        e.preventDefault();
+      }
+      return false;
+    };
+
+    document.addEventListener('selectstart', handleSelectionPrevent, { capture: true });
+    document.addEventListener('selectionchange', handleSelectionPrevent, { capture: true });
+    document.addEventListener('contextmenu', handleContextMenu, { capture: true });
+
+    return () => {
+      document.body.classList.remove('holding-hug');
+      document.removeEventListener('selectstart', handleSelectionPrevent, { capture: true });
+      document.removeEventListener('selectionchange', handleSelectionPrevent, { capture: true });
+      document.removeEventListener('contextmenu', handleContextMenu, { capture: true });
+    };
+  }, [isHoldingHug]);
+
+  // Direct non-passive touch listeners on the Hug Button to guarantee zero text selection on phones
+  useEffect(() => {
+    const el = hugButtonRef.current;
+    if (!el) return;
+
+    const onTouchStartNative = (e) => {
+      if (e.cancelable) e.preventDefault();
+      startHugCharge(e);
+    };
+
+    const onTouchMoveNative = (e) => {
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onTouchEndNative = (e) => {
+      if (e.cancelable) e.preventDefault();
+      stopHugCharge(e);
+    };
+
+    const onTouchCancelNative = (e) => {
+      stopHugCharge(e);
+    };
+
+    const onContextMenuNative = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    };
+
+    const onSelectStartNative = (e) => {
+      e.preventDefault();
+      return false;
+    };
+
+    el.addEventListener('touchstart', onTouchStartNative, { passive: false });
+    el.addEventListener('touchmove', onTouchMoveNative, { passive: false });
+    el.addEventListener('touchend', onTouchEndNative, { passive: false });
+    el.addEventListener('touchcancel', onTouchCancelNative, { passive: false });
+    el.addEventListener('contextmenu', onContextMenuNative);
+    el.addEventListener('selectstart', onSelectStartNative);
+
+    return () => {
+      el.removeEventListener('touchstart', onTouchStartNative);
+      el.removeEventListener('touchmove', onTouchMoveNative);
+      el.removeEventListener('touchend', onTouchEndNative);
+      el.removeEventListener('touchcancel', onTouchCancelNative);
+      el.removeEventListener('contextmenu', onContextMenuNative);
+      el.removeEventListener('selectstart', onSelectStartNative);
+    };
+  }, [currentLayer, hugCompleted]);
 
   // ==========================================
   // LAYER 5: Grand Apology Vault
@@ -1328,7 +1457,16 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          style={{ textAlign: 'center', maxWidth: '740px', width: '100%', zIndex: 10 }}
+          className="no-select hug-simulator-layer"
+          style={{
+            textAlign: 'center',
+            maxWidth: '740px',
+            width: '100%',
+            zIndex: 10,
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            WebkitTouchCallout: 'none'
+          }}
         >
           <div style={{
             display: 'inline-flex',
@@ -1359,21 +1497,27 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
           </p>
 
           {/* Virtual Hug Sensory Box */}
-          <div style={{
-            backgroundColor: isHoldingHug ? '#240202' : 'var(--color-burgundy-primary)',
-            borderRadius: '28px',
-            padding: '40px 24px',
-            border: '2px solid var(--color-peach-primary)',
-            boxShadow: isHoldingHug ? '0 0 60px rgba(255, 217, 194, 0.7)' : 'var(--shadow-glow)',
-            marginBottom: '26px',
-            minHeight: '400px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-            transition: 'all 0.4s ease'
-          }}>
+          <div
+            className="no-select hug-simulator-layer"
+            style={{
+              backgroundColor: isHoldingHug ? '#240202' : 'var(--color-burgundy-primary)',
+              borderRadius: '28px',
+              padding: 'clamp(28px, 6vw, 40px) clamp(16px, 4vw, 24px)',
+              border: '2px solid var(--color-peach-primary)',
+              boxShadow: isHoldingHug ? '0 0 60px rgba(255, 217, 194, 0.7)' : 'var(--shadow-glow)',
+              marginBottom: '26px',
+              minHeight: 'clamp(320px, 50vh, 400px)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+              transition: 'all 0.4s ease',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              WebkitTouchCallout: 'none'
+            }}
+          >
             
             {/* Glowing Warm Aura Waves */}
             {isHoldingHug && (
@@ -1393,21 +1537,34 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
             )}
 
             {/* The Interactive Glowing Heart (Press and Hold Trigger) */}
-            <motion.div
+            <motion.button
+              ref={hugButtonRef}
+              type="button"
               onMouseDown={startHugCharge}
               onMouseUp={stopHugCharge}
               onMouseLeave={stopHugCharge}
               onTouchStart={startHugCharge}
               onTouchEnd={stopHugCharge}
+              onTouchCancel={stopHugCharge}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }}
+              onSelectStart={(e) => {
+                e.preventDefault();
+                return false;
+              }}
               animate={isHoldingHug ? {
                 scale: [1, 1.18, 1],
                 rotate: [-2, 2, -2]
               } : { scale: 1 }}
               transition={{ repeat: Infinity, duration: 0.8 }}
               whileTap={{ scale: 1.15 }}
+              className="no-select hug-button"
               style={{
-                width: '130px',
-                height: '130px',
+                width: 'clamp(110px, 25vw, 130px)',
+                height: 'clamp(110px, 25vw, 130px)',
                 borderRadius: '50%',
                 backgroundColor: hugCompleted ? '#2E7D32' : '#8D0B0B',
                 border: '3px solid #FFD9C2',
@@ -1418,20 +1575,36 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
                 justifyContent: 'center',
                 cursor: 'pointer',
                 userSelect: 'none',
+                WebkitUserSelect: 'none',
+                WebkitTouchCallout: 'none',
                 touchAction: 'none',
+                WebkitTapHighlightColor: 'transparent',
+                outline: 'none',
+                padding: 0,
+                fontFamily: 'inherit',
                 zIndex: 10,
                 marginBottom: '24px',
                 position: 'relative'
               }}
             >
-              <Heart size={42} fill="#FFD9C2" color="#FFD9C2" />
-              <span style={{ fontSize: '0.65rem', fontWeight: 900, color: '#FFD9C2', marginTop: '6px', letterSpacing: '0.05em' }}>
+              <Heart size={42} fill="#FFD9C2" color="#FFD9C2" style={{ pointerEvents: 'none' }} />
+              <span style={{
+                fontSize: '0.65rem',
+                fontWeight: 900,
+                color: '#FFD9C2',
+                marginTop: '6px',
+                letterSpacing: '0.05em',
+                pointerEvents: 'none',
+                userSelect: 'none',
+                WebkitUserSelect: 'none',
+                WebkitTouchCallout: 'none'
+              }}>
                 {hugCompleted ? "HUGGED!" : isHoldingHug ? "HOLDING..." : "HOLD ME"}
               </span>
-            </motion.div>
+            </motion.button>
 
             {/* Hug Progress Bar */}
-            <div style={{ width: '100%', maxWidth: '340px', marginBottom: '16px' }}>
+            <div style={{ width: '100%', maxWidth: 'min(340px, 90%)', marginBottom: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', fontWeight: 800, color: '#FFD9C2', marginBottom: '8px' }}>
                 <span>{hugCompleted ? "Warmth Level: 100% Fully Hugged" : isHoldingHug ? `Squeezing tight... Don't let go, ${recipientName}` : "Press & Hold the Heart"}</span>
                 <span>{hugProgress}%</span>
@@ -1445,11 +1618,11 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
             <div style={{ minHeight: '36px', textAlign: 'center' }}>
               <AnimatePresence>
                 {isHoldingHug ? (
-                  <motion.p initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} style={{ fontFamily: 'var(--font-handwriting)', fontSize: '1.65rem', color: '#FFF1E8', margin: 0 }}>
+                  <motion.p initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} style={{ fontFamily: 'var(--font-handwriting)', fontSize: 'clamp(1.3rem, 3.8vw, 1.65rem)', color: '#FFF1E8', margin: 0 }}>
                     {hugProgress < 40 ? `"Letting all the tension and frustration melt away for ${recipientName}..."` : hugProgress < 80 ? `"${recipientName}, you are safe in my arms, always."` : `"I'm holding you tight, ${recipientName}, and choosing you forever."`}
                   </motion.p>
                 ) : hugCompleted ? (
-                  <motion.p initial={{ scale: 0.8 }} animate={{ scale: 1 }} style={{ fontFamily: 'var(--font-handwriting)', fontSize: '1.75rem', color: '#FFD9C2', margin: 0, fontWeight: 700 }}>
+                  <motion.p initial={{ scale: 0.8 }} animate={{ scale: 1 }} style={{ fontFamily: 'var(--font-handwriting)', fontSize: 'clamp(1.35rem, 4vw, 1.75rem)', color: '#FFD9C2', margin: 0, fontWeight: 700 }}>
                     "Tension 100% melted. Opening private apology vault for {recipientName}..."
                   </motion.p>
                 ) : (
@@ -1460,6 +1633,7 @@ export const ApologyLiveExperience = ({ recipientName = "Stacy", onComplete }) =
               </AnimatePresence>
             </div>
           </div>
+
         </motion.div>
       )}
 
